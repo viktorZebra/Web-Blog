@@ -1,11 +1,11 @@
 package com.example.webblog
 
-import com.example.webblog.model.UserModel
+import com.example.webblog.model.entity.UserEntity
 import com.example.webblog.service.UserService
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -43,7 +43,7 @@ class RestTests {
             url("1"),
             HttpMethod.GET,
             HttpEntity("1", headers),
-            UserModel::class.java
+            UserEntity::class.java
         )
 
         assertEquals(HttpStatus.OK, response.statusCode)
@@ -53,7 +53,7 @@ class RestTests {
 
     @Test
     fun createUser() {
-        val user: UserModel = UserModel(fullname = "test",
+        val user: UserEntity = UserEntity(fullname = "test",
                                         email = "test@test.ru",
                                         nickname = "null",
                                         about = "test",
@@ -63,7 +63,7 @@ class RestTests {
             url(""),
             HttpMethod.POST,
             HttpEntity(user, headers),
-            UserModel::class.java
+            UserEntity::class.java
         )
 
         assertEquals(HttpStatus.CREATED, response.statusCode)
@@ -73,7 +73,7 @@ class RestTests {
 
     @Test
     fun updateUserProfile() {
-        val user: UserModel = UserModel(fullname = "test",
+        val user: UserEntity = UserEntity(fullname = "test",
             email = "newTest@test.ru",
             nickname = "null",
             about = "test",
@@ -83,7 +83,7 @@ class RestTests {
             url("1"),
             HttpMethod.PUT,
             HttpEntity(user, headers),
-            UserModel::class.java
+            UserEntity::class.java
         )
 
         assertEquals(HttpStatus.OK, response.statusCode)

@@ -65,16 +65,6 @@ CREATE INDEX IF NOT EXISTS post_path2 on posts ((path[2]));
 CREATE INDEX IF NOT EXISTS post_path2_path ON posts ((path[2]) DESC, path ASC);
 CREATE INDEX IF NOT EXISTS post_path ON posts (path ASC);
 
-CREATE TABLE IF NOT EXISTS thread_votes (
-			id SERIAL PRIMARY KEY,
-			thread_id INT,
-			user_id INT,
-			voice INT,
-			FOREIGN KEY (thread_id) REFERENCES threads (id),
-			FOREIGN KEY (user_id) REFERENCES users (id)
-		);
-CREATE INDEX IF NOT EXISTS thread_votes_thread_nickname ON thread_votes (thread_id, user_id);
-
 CREATE TABLE IF NOT EXISTS statistics (
 			count_users INT,
 			count_forums INT,
