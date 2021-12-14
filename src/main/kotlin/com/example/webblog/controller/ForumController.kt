@@ -21,8 +21,7 @@ class ForumResource(val forumService: ForumService,
                     val forumUserService: ForumUsersService,
                     val convertForum: ForumsMapper,
                     val convertUser: UserMapper,
-                    val convertThread: ThreadsMapper
-) {
+                    val convertThread: ThreadsMapper) {
 
     @PostMapping
     fun createForum(@RequestBody forum: ForumsDto): ResponseEntity<ForumsDto>{
