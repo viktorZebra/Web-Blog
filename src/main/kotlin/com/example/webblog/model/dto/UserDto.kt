@@ -6,5 +6,5 @@ data class UserDto(
     var nickname: String? = null,
     var about: String,
     var count_view_profile: Int,
-    var id: Int
+    var id: Int? = null
     )
