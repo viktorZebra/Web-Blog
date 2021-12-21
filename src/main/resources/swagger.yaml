@@ -13,7 +13,88 @@ consumes:
 produces:
   - application/json
 paths:
-  /forum:
+  /statistics/threads:
+    get:
+      summary: Общее число тредов
+      description: |
+        Общее число тредов.
+      operationId: threadsAll
+      parameters:
+        - name: forum
+          in: body
+          description: Данные форума.
+          required: true
+          schema:
+            $ref: '#/definitions/Statuser'
+      responses:
+        201:
+          description: |
+            Общее число пользователей.
+            Возвращает число пользователей.
+          schema:
+            $ref: '#/definitions/Forum'
+
+  /statistics/forums:
+    get:
+      summary: Общее число форумов
+      description: |
+        Общее число форумов.
+      operationId: forumsAll
+      parameters:
+        - name: forum
+          in: body
+          description: Данные форума.
+          required: true
+          schema:
+            $ref: '#/definitions/Statuser'
+      responses:
+        201:
+          description: |
+            Общее число пользователей.
+            Возвращает число пользователей.
+          schema:
+            $ref: '#/definitions/Forum'
+
+  /statistics/users:
+    get:
+      summary: Общее число пользователей
+      description: |
+        Общее число пользователей.
+      operationId: usersAll
+      parameters:
+        - name: forum
+          in: body
+          description: Данные форума.
+          required: true
+          schema:
+            $ref: '#/definitions/Statuser'
+      responses:
+        201:
+          description: |
+            Общее число пользователей.
+            Возвращает число пользователей.
+          schema:
+            $ref: '#/definitions/Forum'
+  /forums:
+    get:
+      summary: Список всех форумов
+      description: |
+        Список всех форумов.
+      operationId: forumAll
+      parameters:
+        - name: forum
+          in: body
+          description: Данные форума.
+          required: true
+          schema:
+            $ref: '#/definitions/Forum'
+      responses:
+        201:
+          description: |
+            Список форумов.
+            Возвращает данные всех форумов.
+          schema:
+            $ref: '#/definitions/Forum'
     post:
       summary: Создание форума
       description: |
@@ -44,7 +125,8 @@ paths:
             Возвращает данные ранее созданного форума.
           schema:
             $ref: '#/definitions/Forum'
-  /forum/{id}:
+            
+  /forums/{id}:
     get:
       summary: Получение информации о форуме
       description: |
@@ -69,7 +151,52 @@ paths:
             Форум отсутсвует в системе.
           schema:
             $ref: '#/definitions/Error'
-  /forum/{id}/thread:
+  /forums/{id}/threads:
+    get:
+      summary: Список ветвей обсужления форума
+      description: |
+        Получение списка ветвей обсужления данного форума.
+        Ветви обсуждения выводятся отсортированные по дате создания.
+      consumes: [ ]
+      operationId: forumGetThreads
+      parameters:
+        - name: id
+          in: path
+          description: Идентификатор форума.
+          required: true
+          type: string
+          format: identity
+        - name: limit
+          in: query
+          type: number
+          format: int32
+          default: 100
+          minimum: 1
+          maximum: 10000
+          description: Максимальное кол-во возвращаемых записей.
+        - name: since
+          in: query
+          type: string
+          format: date-time
+          description: |
+            Дата создания ветви обсуждения, с которой будут выводиться записи
+            (ветвь обсуждения с указанной датой попадает в результат выборки).
+        - name: desc
+          in: query
+          type: boolean
+          description: |
+            Флаг сортировки по убыванию.
+      responses:
+        200:
+          description: |
+            Информация о ветках обсуждения на форуме.
+          schema:
+            $ref: '#/definitions/Threads'
+        404:
+          description: |
+            Форум отсутсвует в системе.
+          schema:
+            $ref: '#/definitions/Error'
     post:
       summary: Создание ветки
       description: |
@@ -106,7 +233,7 @@ paths:
             Возвращает данные ранее созданной ветки обсуждения.
           schema:
             $ref: '#/definitions/Thread'
-  /forum/{id}/users:
+  /forums/{id}/users:
     get:
       summary: Пользователи данного форума
       description: |
@@ -153,53 +280,7 @@ paths:
             Форум отсутсвует в системе.
           schema:
             $ref: '#/definitions/Error'
-  /forum/{id}/threads:
-    get:
-      summary: Список ветвей обсужления форума
-      description: |
-        Получение списка ветвей обсужления данного форума.
-        Ветви обсуждения выводятся отсортированные по дате создания.
-      consumes: [ ]
-      operationId: forumGetThreads
-      parameters:
-        - name: id
-          in: path
-          description: Идентификатор форума.
-          required: true
-          type: string
-          format: identity
-        - name: limit
-          in: query
-          type: number
-          format: int32
-          default: 100
-          minimum: 1
-          maximum: 10000
-          description: Максимальное кол-во возвращаемых записей.
-        - name: since
-          in: query
-          type: string
-          format: date-time
-          description: |
-            Дата создания ветви обсуждения, с которой будут выводиться записи
-            (ветвь обсуждения с указанной датой попадает в результат выборки).
-        - name: desc
-          in: query
-          type: boolean
-          description: |
-            Флаг сортировки по убыванию.
-      responses:
-        200:
-          description: |
-            Информация о ветках обсуждения на форуме.
-          schema:
-            $ref: '#/definitions/Threads'
-        404:
-          description: |
-            Форум отсутсвует в системе.
-          schema:
-            $ref: '#/definitions/Error'
-  /post/{id}:
+  /forums/{id}/threads/{id}/posts/{id}:
     get:
       summary: Получение информации о сообщении
       description: |
@@ -267,91 +348,7 @@ paths:
             Сообщение отсутсвует в форуме.
           schema:
             $ref: '#/definitions/Error'
-  /post:
-    post:
-      summary: Создание новых постов
-      description: |
-        Добавление новых постов в ветку обсуждения на форум.
-        Все посты, созданные в рамках одного вызова данного метода должны иметь одинаковую дату создания (Post.Created).
-      operationId: postsCreate
-      parameters:
-        - name: posts
-          in: body
-          description: Список создаваемых постов.
-          required: true
-          schema:
-            $ref: '#/definitions/Posts'
-      responses:
-        201:
-          description: |
-            Посты успешно созданы.
-            Возвращает данные созданных постов в том же порядке, в котором их передали на вход метода.
-          schema:
-            $ref: '#/definitions/Posts'
-        404:
-          description: |
-            Ветка обсуждения отсутствует в базе данных.
-          schema:
-            $ref: '#/definitions/Error'
-        409:
-          description: |
-            Хотя бы один родительский пост отсутсвует в текущей ветке обсуждения.
-          schema:
-            $ref: '#/definitions/Error'
-  /thread/{id}:
-    get:
-      summary: Получение информации о ветке обсуждения
-      description: |
-        Получение информации о ветке обсуждения по его имени.
-      consumes: [ ]
-      operationId: threadGetOne
-      parameters:
-        - name: id
-          in: path
-          description: Идентификатор ветки обсуждения.
-          required: true
-          type: string
-      responses:
-        200:
-          description: |
-            Информация о ветке обсуждения.
-          schema:
-            $ref: '#/definitions/Thread'
-        404:
-          description: |
-            Ветка обсуждения отсутсвует в форуме.
-          schema:
-            $ref: '#/definitions/Error'
-    put:
-      summary: Обновление ветки
-      description: |
-        Обновление ветки обсуждения на форуме.
-      operationId: threadUpdate
-      parameters:
-        - name: id
-          in: path
-          description: Идентификатор ветки обсуждения.
-          required: true
-          type: string
-          format: identity
-        - name: thread
-          in: body
-          description: Данные ветки обсуждения.
-          required: true
-          schema:
-            $ref: '#/definitions/ThreadUpdate'
-      responses:
-        200:
-          description: |
-            Информация о ветке обсуждения.
-          schema:
-            $ref: '#/definitions/Thread'
-        404:
-          description: |
-            Ветка обсуждения отсутсвует в форуме.
-          schema:
-            $ref: '#/definitions/Error'
-  /thread/{id}/posts:
+  /forums/{id}/threads/{id}/posts/:
     get:
       summary: Сообщения данной ветви обсуждения
       description: |
@@ -414,7 +411,116 @@ paths:
             Ветка обсуждения отсутсвует в форуме.
           schema:
             $ref: '#/definitions/Error'
-  /user:
+    post:
+      summary: Создание новых постов
+      description: |
+        Добавление новых постов в ветку обсуждения на форум.
+      operationId: postsCreate
+      parameters:
+        - name: id
+          in: path
+          description: Идентификатор сообщения.
+          required: true
+          type: number
+          format: int64
+      
+        - name: posts
+          in: body
+          description: Список создаваемых постов.
+          required: true
+          schema:
+            $ref: '#/definitions/Posts'
+      responses:
+        201:
+          description: |
+            Посты успешно созданы.
+            Возвращает данные созданных постов в том же порядке, в котором их передали на вход метода.
+          schema:
+            $ref: '#/definitions/Posts'
+        404:
+          description: |
+            Ветка обсуждения отсутствует в базе данных.
+          schema:
+            $ref: '#/definitions/Error'
+        409:
+          description: |
+            Хотя бы один родительский пост отсутсвует в текущей ветке обсуждения.
+          schema:
+            $ref: '#/definitions/Error'
+  /forums/{id}/threads/{id}:
+    get:
+      summary: Получение информации о ветке обсуждения
+      description: |
+        Получение информации о ветке обсуждения по его имени.
+      consumes: [ ]
+      operationId: threadGetOne
+      parameters:
+        - name: id
+          in: path
+          description: Идентификатор ветки обсуждения.
+          required: true
+          type: string
+      responses:
+        200:
+          description: |
+            Информация о ветке обсуждения.
+          schema:
+            $ref: '#/definitions/Thread'
+        404:
+          description: |
+            Ветка обсуждения отсутсвует в форуме.
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Обновление ветки
+      description: |
+        Обновление ветки обсуждения на форуме.
+      operationId: threadUpdate
+      parameters:
+        - name: id
+          in: path
+          description: Идентификатор ветки обсуждения.
+          required: true
+          type: string
+          format: identity
+        - name: thread
+          in: body
+          description: Данные ветки обсуждения.
+          required: true
+          schema:
+            $ref: '#/definitions/ThreadUpdate'
+      responses:
+        200:
+          description: |
+            Информация о ветке обсуждения.
+          schema:
+            $ref: '#/definitions/Thread'
+        404:
+          description: |
+            Ветка обсуждения отсутсвует в форуме.
+          schema:
+            $ref: '#/definitions/Error'
+
+  /users:
+    get:
+      summary: Список всех пользователей
+      description: |
+        Список всех пользователей.
+      operationId: userAll
+      parameters:
+        - name: profile
+          in: body
+          description: Данные пользовательского профиля.
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        201:
+          description: |
+            Список пользователей.
+            Возвращает данные пользователей.
+          schema:
+            $ref: '#/definitions/User'
     post:
       summary: Создание нового пользователя
       description: |
@@ -440,7 +546,7 @@ paths:
             Возвращает данные ранее созданных пользователей с тем же nickname-ом иои email-ом.
           schema:
             $ref: '#/definitions/Users'
-  /user/{id}:
+  /users/{id}:
     get:
       summary: Получение информации о пользователе
       description: |
@@ -606,6 +712,48 @@ definitions:
         type: string
         description: Название форума.
         example: Pirate stories
+        x-isnullable: false
+      user:
+        type: string
+        format: identity
+        description: Nickname пользователя, который отвечает за форум.
+        example: j.sparrow
+        x-isnullable: false
+      slug:
+        type: string
+        format: identity
+        description: Человекопонятный URL (https://ru.wikipedia.org/wiki/%D0%A1%D0%B5%D0%BC%D0%B0%D0%BD%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_URL), уникальное поле.
+        pattern: ^(\d|\w|-|_)*(\w|-|_)(\d|\w|-|_)*$
+        example: pirate-stories
+        x-isnullable: false
+      posts:
+        type: number
+        format: int64
+        readOnly: true
+        description: |
+          Общее кол-во сообщений в данном форуме.
+        example: 200000
+      threads:
+        type: number
+        format: int32
+        readOnly: true
+        description: |
+          Общее кол-во ветвей обсуждения в данном форуме.
+        example: 200
+    required:
+      - title
+      - user
+      - slug
+      
+  Statuser:
+    description: |
+      Информация о числе пользователей.
+    type: object
+    properties:
+      title:
+        type: string
+        description: Название форума.
+        example: Pirate storiesа
         x-isnullable: false
       user:
         type: string
