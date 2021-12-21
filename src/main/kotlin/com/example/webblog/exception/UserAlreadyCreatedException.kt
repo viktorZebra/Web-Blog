@@ -1,6 +1,6 @@
 package com.example.webblog.exception
 
-import com.example.webblog.model.entity.UserEntity
+import com.example.webblog.model.User
 
-class UserAlreadyCreatedException(val userModel: UserEntity?) : RuntimeException() {
+class UserAlreadyCreatedException(val userModel: User?) : RuntimeException() {
 }

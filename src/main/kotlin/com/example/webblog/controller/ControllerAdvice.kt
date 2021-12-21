@@ -1,6 +1,7 @@
 package com.example.webblog.controller
 
 import com.example.webblog.exception.*
+import com.example.webblog.model.User
 import com.example.webblog.model.entity.ForumsEntity
 import com.example.webblog.model.entity.ThreadsEntity
 import com.example.webblog.model.entity.UserEntity
@@ -19,8 +20,8 @@ class ControllerAdvice {
     }
 
     @ExceptionHandler(UserAlreadyCreatedException::class)
-    fun userAlreadyCreatedException(e: UserAlreadyCreatedException): ResponseEntity<UserEntity> {
-        return ResponseEntity<UserEntity>(e.userModel, HttpStatus.CONFLICT)
+    fun userAlreadyCreatedException(e: UserAlreadyCreatedException): ResponseEntity<User> {
+        return ResponseEntity<User>(e.userModel, HttpStatus.CONFLICT)
     }
 
     @ExceptionHandler(ForumAlreadyCreatedException::class)
