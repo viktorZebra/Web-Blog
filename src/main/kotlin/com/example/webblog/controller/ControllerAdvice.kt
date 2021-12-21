@@ -1,6 +1,8 @@
 package com.example.webblog.controller
 
 import com.example.webblog.exception.*
+import com.example.webblog.model.Forums
+import com.example.webblog.model.Threads
 import com.example.webblog.model.User
 import com.example.webblog.model.entity.ForumsEntity
 import com.example.webblog.model.entity.ThreadsEntity
@@ -25,8 +27,8 @@ class ControllerAdvice {
     }
 
     @ExceptionHandler(ForumAlreadyCreatedException::class)
-    fun forumAlreadyCreatedException(e: ForumAlreadyCreatedException): ResponseEntity<ForumsEntity> {
-        return ResponseEntity<ForumsEntity>(e.forumsModel, HttpStatus.CONFLICT)
+    fun forumAlreadyCreatedException(e: ForumAlreadyCreatedException): ResponseEntity<Forums> {
+        return ResponseEntity<Forums>(e.forumsModel, HttpStatus.CONFLICT)
     }
 
     @ExceptionHandler(ForumNotFoundException::class)
@@ -36,8 +38,8 @@ class ControllerAdvice {
     }
 
     @ExceptionHandler(ThreadAlreadyCreatedException::class)
-    fun threadAlreadyCreatedException(e: ThreadAlreadyCreatedException): ResponseEntity<ThreadsEntity> {
-        return ResponseEntity<ThreadsEntity>(e.existedThread, HttpStatus.CONFLICT)
+    fun threadAlreadyCreatedException(e: ThreadAlreadyCreatedException): ResponseEntity<Threads> {
+        return ResponseEntity<Threads>(e.existedThread, HttpStatus.CONFLICT)
     }
 
     @ExceptionHandler(ThreadNotFoundException::class)

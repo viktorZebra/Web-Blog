@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 
-@Repository
+
 interface PostsRepository : CrudRepository<PostsEntity, Int> {
     @Query("select * from posts where thread_id = :id")
     fun getPostsByThreadId(@Param("id") id: Int): MutableList<PostsEntity?>

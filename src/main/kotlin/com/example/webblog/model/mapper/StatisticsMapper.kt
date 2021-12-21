@@ -6,7 +6,7 @@ import com.example.webblog.model.entity.StatisticsEntity
 import org.mapstruct.Mapper
 
 @Mapper(componentModel = "spring")
-interface StatusMapper {
+interface StatisticsMapper {
     fun convertEntityToModel(statusEntity: StatisticsEntity) : Statistics
 
     fun convertModelToEntity(status: Statistics) : StatisticsEntity

@@ -6,11 +6,12 @@ import com.example.webblog.model.Threads
 import com.example.webblog.model.entity.ThreadsEntity
 import com.example.webblog.model.mapper.ThreadsMapper
 import com.example.webblog.repository.ThreadsRepository
+import com.example.webblog.repository.custom.imp.ThreadsRepositoryCustom
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class ThreadsService @Autowired constructor(val threadRepository: ThreadsRepository,
+class ThreadsService @Autowired constructor(val threadRepository: ThreadsRepositoryCustom,
                                             val userService: UserService,
                                             val forumService: ForumService,
                                             val forumUserService: ForumUsersService,
@@ -29,7 +30,7 @@ class ThreadsService @Autowired constructor(val threadRepository: ThreadsReposit
 
         if (existsThread == null || existsThread.id == id.toInt()) {
             newThread.id = id.toInt()
-            threadRepository.save(newThread.let { convert.convertModelToEntity(it) })
+            threadRepository.save(newThread)
         } else {
             throw ThreadAlreadyCreatedException(existsThread)
         }
@@ -45,9 +46,9 @@ class ThreadsService @Autowired constructor(val threadRepository: ThreadsReposit
     }
 
     fun getThreadById(id: Int): Threads {
-        val thread: ThreadsEntity? = threadRepository.getThreadById(id)
+        val thread: Threads? = threadRepository.getThreadById(id)
         if (thread != null) {
-            return thread.let { convert.convertEntityToModel(it) }
+            return thread
         }
         else{
             throw throw ThreadNotFoundException("Can't find thread by id")
@@ -61,14 +62,12 @@ class ThreadsService @Autowired constructor(val threadRepository: ThreadsReposit
         checkThreadExists(thread.slug)
 
         forumUserService.save(thread.author_id, thread.forum_id)
-        threadRepository.save(thread.let { convert.convertModelToEntity(it) })
+        threadRepository.save(thread)
     }
 
     fun getThreadByForum(id: Int): List<Threads?> {
         forumService.getForumById(id.toString())
 
         return threadRepository.getThreadByForum(id)
-            .filterNotNull()
-            .map { convert.convertEntityToModel(it) }
     }
 }

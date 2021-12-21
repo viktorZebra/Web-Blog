@@ -5,11 +5,12 @@ import com.example.webblog.model.Posts
 import com.example.webblog.model.entity.PostsEntity
 import com.example.webblog.model.mapper.PostsMapper
 import com.example.webblog.repository.PostsRepository
+import com.example.webblog.repository.custom.imp.PostsRepositoryCustom
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class PostService @Autowired constructor(val postRepository: PostsRepository,
+class PostService @Autowired constructor(val postRepository: PostsRepositoryCustom,
                                          val threadService: ThreadsService,
                                          val userService: UserService,
                                          val forumUserService: ForumUsersService,
@@ -23,20 +24,18 @@ class PostService @Autowired constructor(val postRepository: PostsRepository,
         forumService.getForumById(post.forum_id.toString())
 
         forumUserService.save(post.author_id, post.forum_id)
-        postRepository.save(post.let { convert.convertModelToEntity(it) })
+        postRepository.save(post)
     }
 
     fun getPostsByThreadId(id: String): List<Posts?> {
         threadService.getThreadById(id.toInt())
         return postRepository.getPostsByThreadId(id.toInt())
-               .filterNotNull()
-               .map { convert.convertEntityToModel(it) }
     }
 
     fun getPostById(id: String): Posts {
-        val post: PostsEntity? = postRepository.getPostById(id.toInt())
+        val post: Posts? = postRepository.getPostById(id.toInt())
         if (post != null) {
-            return post.let { convert.convertEntityToModel(it) }
+            return post
         }
         else{
             throw PostNotFoundException("Can't find post by id")
@@ -47,6 +46,6 @@ class PostService @Autowired constructor(val postRepository: PostsRepository,
         postRepository.getPostById(id.toInt())
 
         newPost.id = id.toInt()
-        postRepository.save(newPost.let { convert.convertModelToEntity(it) })
+        postRepository.save(newPost)
     }
 }

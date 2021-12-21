@@ -6,19 +6,20 @@ import com.example.webblog.model.Forums
 import com.example.webblog.model.entity.ForumsEntity
 import com.example.webblog.model.mapper.ForumsMapper
 import com.example.webblog.repository.ForumsRepository
+import com.example.webblog.repository.custom.imp.ForumsRepositoryCustom
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class ForumService @Autowired constructor(val forumRepository: ForumsRepository,
+class ForumService @Autowired constructor(val forumRepository: ForumsRepositoryCustom,
                                           val userService: UserService,
                                           val convert: ForumsMapper
 ) {
 
     fun getForumBySlug(slug: String): Forums {
-        val forums: ForumsEntity? = forumRepository.getForumBySlug(slug)
+        val forums: Forums? = forumRepository.getForumBySlug(slug)
         if (forums != null) {
-            return forums.let { convert.convertEntityToModel(it) }
+            return forums
         }
         else{
             throw ForumNotFoundException("Can't find forum by slug")
@@ -26,9 +27,9 @@ class ForumService @Autowired constructor(val forumRepository: ForumsRepository,
     }
 
     fun getForumById(id: String): Forums {
-        val forums: ForumsEntity? = forumRepository.getForumById(id.toInt())
+        val forums: Forums? = forumRepository.getForumById(id.toInt())
         if (forums != null) {
-            return forums.let { convert.convertEntityToModel(it) }
+            return forums
         }
         else{
             throw ForumNotFoundException("Can't find forum by id")
@@ -39,7 +40,7 @@ class ForumService @Autowired constructor(val forumRepository: ForumsRepository,
         checkForumExists(forum.slug)
         userService.getUserById(forum.author_id.toString())
 
-        forumRepository.save(forum.let { convert.convertModelToEntity(it) })
+        forumRepository.save(forum)
     }
 
     private fun checkForumExists(forumName: String) {

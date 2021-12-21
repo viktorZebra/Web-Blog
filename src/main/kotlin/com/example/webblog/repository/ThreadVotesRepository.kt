@@ -4,6 +4,6 @@ import com.example.webblog.model.entity.ThreadVotesEntity
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
-@Repository
+
 interface ThreadVotesRepository : CrudRepository<ThreadVotesEntity, Int> {
 }

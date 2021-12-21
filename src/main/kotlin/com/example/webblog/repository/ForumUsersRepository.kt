@@ -5,9 +5,7 @@ import com.example.webblog.model.entity.UserEntity
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
-import org.springframework.stereotype.Repository
 
-@Repository
 interface ForumUsersRepository : CrudRepository<ForumUsersEntity, Int> {
 
     @Query("select COUNT(*) from forum_users where user_id = :user_id and forum_id = :forum_id")
