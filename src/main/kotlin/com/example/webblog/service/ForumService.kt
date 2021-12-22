@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service
 @Service
 class ForumService @Autowired constructor(val forumRepository: ForumsRepositoryCustom,
                                           val userService: UserService,
-                                          val convert: ForumsMapper
+                                          val convert: ForumsMapper,
+                                          val statisticsService: StatisticsService
 ) {
 
     fun getForumBySlug(slug: String): Forums {
@@ -41,6 +42,14 @@ class ForumService @Autowired constructor(val forumRepository: ForumsRepositoryC
         userService.getUserById(forum.author_id.toString())
 
         forumRepository.save(forum)
+
+        val tmp = statisticsService.getStatistics()
+        tmp.count_forums++
+        statisticsService.save(tmp)
+    }
+
+    fun getAllForums(): List<Forums>{
+        return forumRepository.getAllForums()
     }
 
     private fun checkForumExists(forumName: String) {

@@ -854,10 +854,6 @@ definitions:
       Пустые параметры остаются без изменений.
     type: object
     properties:
-      title:
-        type: string
-        description: Заголовок ветки обсуждения.
-        example: Davy Jones cache
       message:
         type: string
         format: text

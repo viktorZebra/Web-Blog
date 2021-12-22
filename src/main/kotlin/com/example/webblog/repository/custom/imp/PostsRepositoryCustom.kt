@@ -21,6 +21,10 @@ class PostsRepositoryCustom @Autowired constructor(private val rep: PostsReposit
         rep.deleteById(id)
     }
 
+    fun getAll(): List<Posts>{
+        return rep.findAll().map { convert.convertEntityToModel(it) }
+    }
+
     fun save(posts: Posts): Posts {
 
         return rep.save(

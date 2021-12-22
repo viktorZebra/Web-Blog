@@ -15,7 +15,8 @@ class ThreadsService @Autowired constructor(val threadRepository: ThreadsReposit
                                             val userService: UserService,
                                             val forumService: ForumService,
                                             val forumUserService: ForumUsersService,
-                                            val convert: ThreadsMapper
+                                            val convert: ThreadsMapper,
+                                            val statisticsService: StatisticsService
 ) {
 
     fun checkThreadExists(slug: String) {
@@ -63,6 +64,10 @@ class ThreadsService @Autowired constructor(val threadRepository: ThreadsReposit
 
         forumUserService.save(thread.author_id, thread.forum_id)
         threadRepository.save(thread)
+
+        val tmp = statisticsService.getStatistics()
+        tmp.count_threads++
+        statisticsService.save(tmp)
     }
 
     fun getThreadByForum(id: Int): List<Threads?> {

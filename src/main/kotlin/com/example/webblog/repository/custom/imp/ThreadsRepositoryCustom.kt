@@ -1,5 +1,6 @@
 package com.example.webblog.repository.custom.imp
 
+import com.example.webblog.exception.ThreadNotFoundException
 import com.example.webblog.model.Threads
 import com.example.webblog.model.mapper.ThreadsMapper
 import com.example.webblog.repository.ThreadsRepository
@@ -56,6 +57,9 @@ class ThreadsRepositoryCustom @Autowired constructor(private val rep: ThreadsRep
         for (thread in threads){
             if (thread != null)
                 threadsMutList.add(thread.let { convert.convertEntityToModel(it) })
+            else{
+                throw ThreadNotFoundException("Can't find threads in forum")
+            }
         }
 
         return threadsMutList

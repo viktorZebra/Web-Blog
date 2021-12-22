@@ -1,6 +1,7 @@
 package com.example.webblog.repository.custom.imp
 
 import com.example.webblog.model.Statistics
+import com.example.webblog.model.entity.StatisticsEntity
 import com.example.webblog.model.mapper.StatisticsMapper
 import com.example.webblog.repository.StatisticsRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,5 +20,21 @@ class StatisticsRepositoryCustom  @Autowired constructor(private val rep: Statis
             statistics.let { convert.convertModelToEntity(it) }
         )
             .let { convert.convertEntityToModel(it) }
+    }
+
+    fun forums(): Int{
+        return rep.forums()
+    }
+
+    fun users(): Int{
+        return rep.users()
+    }
+
+    fun threads(): Int{
+        return rep.threads()
+    }
+
+    fun getStatistics(): Statistics{
+        return rep.getStatistics().let { convert.convertEntityToModel(it) }
     }
 }

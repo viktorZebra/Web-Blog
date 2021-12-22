@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 
 
 @Service
-class UserService(val userRepository: UserRepositoryCustom) {
+class UserService(val userRepository: UserRepositoryCustom, val statisticsService: StatisticsService) {
 
     fun getUserById(id: String): User
     {
@@ -58,6 +58,10 @@ class UserService(val userRepository: UserRepositoryCustom) {
     fun create(user: User) {
         checkUserExists(user.email, user.nickname!!)
         userRepository.save(user)
+
+        val tmp = statisticsService.getStatistics()
+        tmp.count_users++
+        statisticsService.save(tmp)
     }
 
     fun updateProfile(newUser: User, id: String) {
@@ -71,6 +75,10 @@ class UserService(val userRepository: UserRepositoryCustom) {
         } else {
             throw UserAlreadyCreatedException(userWithEmailForReplace)
         }
+    }
+
+    fun getAllUser(): List<User>{
+        return userRepository.selectAll()
     }
 
     private fun checkUserExists(email: String, nickname: String) {

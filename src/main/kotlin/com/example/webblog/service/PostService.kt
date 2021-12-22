@@ -42,6 +42,10 @@ class PostService @Autowired constructor(val postRepository: PostsRepositoryCust
         }
     }
 
+    fun getAll(): List<Posts>{
+        return postRepository.getAll()
+    }
+
     fun updatePost(newPost: Posts, id: String) {
         postRepository.getPostById(id.toInt())
 

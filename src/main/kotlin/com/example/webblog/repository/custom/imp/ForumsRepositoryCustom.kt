@@ -44,4 +44,8 @@ class ForumsRepositoryCustom @Autowired constructor(private val rep: ForumsRepos
     fun getCountForum(slug: String): Int{
         return rep.getCountForum(slug)
     }
+
+    fun getAllForums(): List<Forums>{
+        return  rep.findAll().map { convert.convertEntityToModel(it) }
+    }
 }

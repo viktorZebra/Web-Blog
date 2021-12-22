@@ -66,6 +66,7 @@ CREATE INDEX IF NOT EXISTS post_path2_path ON posts ((path[2]) DESC, path ASC);
 CREATE INDEX IF NOT EXISTS post_path ON posts (path ASC);
 
 CREATE TABLE IF NOT EXISTS statistics (
+            id SERIAL PRIMARY KEY,
 			count_users INT,
 			count_forums INT,
 			count_threads INT,
@@ -74,6 +75,9 @@ CREATE TABLE IF NOT EXISTS statistics (
             FOREIGN KEY (most_popular_user) REFERENCES users (id),
             FOREIGN KEY (most_viewed_profile) REFERENCES users (id)
 		);
+
+INSERT INTO statistics VALUES
+(0, 0, 0, 0);
 
 CREATE OR REPLACE FUNCTION update_path()
 			RETURNS TRIGGER

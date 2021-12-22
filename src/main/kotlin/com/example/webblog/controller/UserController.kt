@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*
 
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/users")
 class UserResource(val userService: UserService, val convert: UserMapper){
 
     @GetMapping("/{id}")
@@ -17,6 +17,13 @@ class UserResource(val userService: UserService, val convert: UserMapper){
         val user = userService.getUserById(id).let { convert.convertModelToDto(it) }
 
         return ResponseEntity(user, HttpStatus.OK)
+    }
+
+    @GetMapping
+    fun getAllUser(@PathVariable id: String): ResponseEntity<List<UserDto>>{
+        val users = userService.getAllUser().map { convert.convertModelToDto(it) }
+
+        return ResponseEntity(users, HttpStatus.OK)
     }
 
     @PostMapping
