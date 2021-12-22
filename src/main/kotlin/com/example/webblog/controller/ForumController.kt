@@ -1,5 +1,6 @@
 package com.example.webblog.controller
 
+import com.example.webblog.model.User
 import com.example.webblog.model.dto.ForumsDto
 import com.example.webblog.model.dto.PostsDto
 import com.example.webblog.model.dto.ThreadsDto
@@ -90,10 +91,12 @@ class ForumResource(val forumService: ForumService,
         return ResponseEntity(threadService.getThreadById(id_thread.toInt()).let { convertThread.convertModelToDto(it) }, HttpStatus.OK)
     }
 
-    @GetMapping("/{id}/users")
-    fun getUsersByForum(@PathVariable id: String): ResponseEntity<List<UserDto?>>{
-        TODO("ИСПРАВИТЬ")
-        val users = forumUserService.getUsersByForum(id.toInt())
+    @GetMapping("/{id_}")
+    fun getUsersByForum(@PathVariable id_: Int, @RequestParam usersQuery: String): ResponseEntity<List<UserDto?>>{
+        var users = listOf<User?>()
+        if (usersQuery.toInt() == 1) {
+            users = forumUserService.getUsersByForum(id_)
+        }
 
         return ResponseEntity(users.filterNotNull().map { convertUser.convertModelToDto(it) }, HttpStatus.OK)
     }
