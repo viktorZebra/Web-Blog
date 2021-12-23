@@ -130,13 +130,20 @@ paths:
     get:
       summary: Получение информации о форуме
       description: |
-        Получение информации о форуме по его идентификаторе.
+        Получение информации о форуме по его идентификатору.
       consumes: [ ]
       operationId: forumGetOne
       parameters:
         - name: id
           in: path
           description: Идентификатор форума.
+          required: true
+          type: string
+          format: identity
+          
+        - name: users
+          in: query
+          description: Query параметр для поиска пользователей форума
           required: true
           type: string
           format: identity
@@ -233,53 +240,7 @@ paths:
             Возвращает данные ранее созданной ветки обсуждения.
           schema:
             $ref: '#/definitions/Thread'
-  /forums/{id}/users:
-    get:
-      summary: Пользователи данного форума
-      description: |
-        Получение списка пользователей, у которых есть пост или ветка обсуждения в данном форуме.
-        Пользователи выводятся отсортированные по nickname в порядке возрастания.
-        Порядок сотрировки должен соответсвовать побайтовому сравнение в нижнем регистре.
-      consumes: [ ]
-      operationId: forumGetUsers
-      parameters:
-        - name: id
-          in: path
-          description: Идентификатор форума.
-          required: true
-          type: string
-          format: identity
-        - name: limit
-          in: query
-          type: number
-          format: int32
-          default: 100
-          minimum: 1
-          maximum: 10000
-          description: Максимальное кол-во возвращаемых записей.
-        - name: since
-          in: query
-          type: string
-          format: identity
-          description: |
-            Идентификатор пользователя, с которого будут выводиться пользоватли
-            (пользователь с данным идентификатором в результат не попадает).
-        - name: desc
-          in: query
-          type: boolean
-          description: |
-            Флаг сортировки по убыванию.
-      responses:
-        200:
-          description: |
-            Информация о пользователях форума.
-          schema:
-            $ref: '#/definitions/Users'
-        404:
-          description: |
-            Форум отсутсвует в системе.
-          schema:
-            $ref: '#/definitions/Error'
+
   /forums/{id}/threads/{id}/posts/{id}:
     get:
       summary: Получение информации о сообщении
