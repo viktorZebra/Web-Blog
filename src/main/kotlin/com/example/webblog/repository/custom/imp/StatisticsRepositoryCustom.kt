@@ -22,6 +22,18 @@ class StatisticsRepositoryCustom  @Autowired constructor(private val rep: Statis
             .let { convert.convertEntityToModel(it) }
     }
 
+    fun updateUsers() {
+        return rep.updateCountUsers()
+    }
+
+    fun updateForums() {
+        return rep.updateCountForums()
+    }
+
+    fun updateThreads() {
+        return rep.updateCountThreads()
+    }
+
     fun forums(): Int{
         return rep.forums()
     }

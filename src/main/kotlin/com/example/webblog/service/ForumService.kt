@@ -43,9 +43,7 @@ class ForumService @Autowired constructor(val forumRepository: ForumsRepositoryC
 
         forumRepository.save(forum)
 
-        val tmp = statisticsService.getStatistics()
-        tmp.count_forums++
-        statisticsService.save(tmp)
+        statisticsService.updateForums()
     }
 
     fun getAllForums(): List<Forums>{

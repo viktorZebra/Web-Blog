@@ -62,8 +62,13 @@ class ForumResource(val forumService: ForumService,
     }
 
     @GetMapping("/{id}")
-    fun getForumById(@PathVariable id: String): ResponseEntity<ForumsDto>{
-        return ResponseEntity(forumService.getForumById(id).let { convertForum.convertModelToDto(it) }, HttpStatus.OK)
+    fun getForumById(@PathVariable id: String, @RequestParam(required = false) users: String?): ResponseEntity<Any> {
+        return if (users.isNullOrEmpty()) {
+            ResponseEntity(forumService.getForumById(id).let { convertForum.convertModelToDto(it) }, HttpStatus.OK)
+        } else {
+            val usersList = forumUserService.getUsersByForum(id.toInt())
+            ResponseEntity(usersList.filterNotNull().map { convertUser.convertModelToDto(it) }, HttpStatus.OK)
+        }
     }
 
     @GetMapping("/{id}/threads")
@@ -89,16 +94,6 @@ class ForumResource(val forumService: ForumService,
     @GetMapping("/{id_forum}/threads/{id_thread}")
     fun getTreadByIdInForum(@PathVariable id_forum: String, @PathVariable id_thread: String): ResponseEntity<ThreadsDto>{
         return ResponseEntity(threadService.getThreadById(id_thread.toInt()).let { convertThread.convertModelToDto(it) }, HttpStatus.OK)
-    }
-
-    @GetMapping("/{id_}")
-    fun getUsersByForum(@PathVariable id_: Int, @RequestParam usersQuery: String): ResponseEntity<List<UserDto?>>{
-        var users = listOf<User?>()
-        if (usersQuery.toInt() == 1) {
-            users = forumUserService.getUsersByForum(id_)
-        }
-
-        return ResponseEntity(users.filterNotNull().map { convertUser.convertModelToDto(it) }, HttpStatus.OK)
     }
 
     @PatchMapping("/{id_forum}/threads/{id_threads}/posts/{id_post}")

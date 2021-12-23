@@ -59,9 +59,7 @@ class UserService(val userRepository: UserRepositoryCustom, val statisticsServic
         checkUserExists(user.email, user.nickname!!)
         userRepository.save(user)
 
-        val tmp = statisticsService.getStatistics()
-        tmp.count_users++
-        statisticsService.save(tmp)
+        statisticsService.updateUsers()
     }
 
     fun updateProfile(newUser: User, id: String) {

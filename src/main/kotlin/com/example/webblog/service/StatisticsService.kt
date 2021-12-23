@@ -26,4 +26,16 @@ class StatisticsService(val statisticsRepository: StatisticsRepositoryCustom) {
     fun getStatistics(): Statistics{
         return statisticsRepository.getStatistics()
     }
+
+    fun updateUsers() {
+        return statisticsRepository.updateUsers()
+    }
+
+    fun updateForums() {
+        return statisticsRepository.updateForums()
+    }
+
+    fun updateThreads() {
+        return statisticsRepository.updateThreads()
+    }
 }

@@ -65,9 +65,7 @@ class ThreadsService @Autowired constructor(val threadRepository: ThreadsReposit
         forumUserService.save(thread.author_id, thread.forum_id)
         threadRepository.save(thread)
 
-        val tmp = statisticsService.getStatistics()
-        tmp.count_threads++
-        statisticsService.save(tmp)
+        statisticsService.updateThreads()
     }
 
     fun getThreadByForum(id: Int): List<Threads?> {
