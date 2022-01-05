@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service
 @Service
 class ForumService @Autowired constructor(val forumRepository: ForumsRepositoryCustom,
                                           val userService: UserService,
-                                          val convert: ForumsMapper,
                                           val statisticsService: StatisticsService
 ) {
 
