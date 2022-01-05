@@ -31,4 +31,6 @@
 
 ## Результаты нагрузочного тестирования
 
-![Alt text](src/main/resources/stress-test.png)
+![Alt text](src/main/resources/test1.png)
+
+![Alt text](src/main/resources/test2.png)
