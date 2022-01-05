@@ -62,13 +62,8 @@ class ForumResource(val forumService: ForumService,
     }
 
     @GetMapping("/{id}")
-    fun getForumById(@PathVariable id: String, @RequestParam(required = false) users: String?): ResponseEntity<Any> {
-        return if (users.isNullOrEmpty()) {
-            ResponseEntity(forumService.getForumById(id).let { convertForum.convertModelToDto(it) }, HttpStatus.OK)
-        } else {
-            val usersList = forumUserService.getUsersByForum(id.toInt())
-            ResponseEntity(usersList.filterNotNull().map { convertUser.convertModelToDto(it) }, HttpStatus.OK)
-        }
+    fun getForumById(@PathVariable id: String): ResponseEntity<Any> {
+        return ResponseEntity(forumService.getForumById(id).let { convertForum.convertModelToDto(it) }, HttpStatus.OK)
     }
 
     @GetMapping("/{id}/threads")

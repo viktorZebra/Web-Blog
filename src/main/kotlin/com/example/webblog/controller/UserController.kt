@@ -2,6 +2,7 @@ package com.example.webblog.controller
 
 import com.example.webblog.model.dto.UserDto
 import com.example.webblog.model.mapper.UserMapper
+import com.example.webblog.service.ForumUsersService
 import com.example.webblog.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/users")
-class UserResource(val userService: UserService, val convert: UserMapper){
+class UserResource(val userService: UserService, val convert: UserMapper, val forumUserService: ForumUsersService) {
 
     @GetMapping("/{id}")
     fun getUser(@PathVariable id: String): ResponseEntity<UserDto>{
@@ -20,10 +21,14 @@ class UserResource(val userService: UserService, val convert: UserMapper){
     }
 
     @GetMapping
-    fun getAllUser(@PathVariable id: String): ResponseEntity<List<UserDto>>{
-        val users = userService.getAllUser().map { convert.convertModelToDto(it) }
-
-        return ResponseEntity(users, HttpStatus.OK)
+    fun getAllUser(@RequestParam(required = false) forumId: String?): ResponseEntity<Any?>{
+        return if (forumId.isNullOrEmpty()) {
+            val users_ = userService.getAllUser().map { convert.convertModelToDto(it) }
+            ResponseEntity(users_, HttpStatus.OK)
+        } else {
+            val usersList = forumUserService.getUsersByForum(forumId.toInt())
+            ResponseEntity(usersList.filterNotNull().map { convert.convertModelToDto(it) }, HttpStatus.OK)
+        }
     }
 
     @PostMapping
