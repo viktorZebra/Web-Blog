@@ -79,16 +79,16 @@ CREATE TABLE IF NOT EXISTS statistics (
 INSERT INTO statistics VALUES
 (0, 0, 0, 0);
 
-CREATE OR REPLACE FUNCTION update_path()
-			RETURNS TRIGGER
-			AS $update_path$
-		DECLARE
-BEGIN
-			NEW.path = array_append(COALESCE((SELECT path FROM posts WHERE id = NEW.parent), ARRAY[0]), NEW.id);
-RETURN NEW;
-END;
-		$update_path$ LANGUAGE plpgsql;
-DROP TRIGGER IF EXISTS posts_path ON posts;
+-- CREATE OR REPLACE FUNCTION update_path()
+-- 			RETURNS TRIGGER
+-- 			AS $update_path$
+-- 		DECLARE
+-- BEGIN
+-- 			NEW.path = array_append(COALESCE((SELECT path FROM posts WHERE id = NEW.parent), ARRAY[0]), NEW.id);
+-- RETURN NEW;
+-- END;
+-- 		$update_path$ LANGUAGE plpgsql;
+-- DROP TRIGGER IF EXISTS posts_path ON posts;
 CREATE TRIGGER posts_path BEFORE INSERT ON posts
     FOR EACH ROW
     EXECUTE PROCEDURE update_path();
