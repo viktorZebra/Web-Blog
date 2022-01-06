@@ -14,8 +14,7 @@ class PostService @Autowired constructor(val postRepository: PostsRepositoryCust
                                          val threadService: ThreadsService,
                                          val userService: UserService,
                                          val forumUserService: ForumUsersService,
-                                         val forumService: ForumService,
-                                         val convert: PostsMapper
+                                         val forumService: ForumService
 ) {
 
     fun createPost(post: Posts) {

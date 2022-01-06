@@ -15,7 +15,6 @@ class ThreadsService @Autowired constructor(val threadRepository: ThreadsReposit
                                             val userService: UserService,
                                             val forumService: ForumService,
                                             val forumUserService: ForumUsersService,
-                                            val convert: ThreadsMapper,
                                             val statisticsService: StatisticsService
 ) {
 

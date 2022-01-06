@@ -21,7 +21,6 @@ internal class ForumServiceTest {
     private val userService = mockk<UserService>()
     private val statisticsService = mockk<StatisticsService>()
 
-    //@Autowired
     private var forumService: ForumService = ForumService(forumRepository, userService, statisticsService)
 
     private var notNullId: Int = 0
@@ -61,8 +60,7 @@ internal class ForumServiceTest {
     @Test
     fun getForumById() {
         val expected = forum
-        val tmp = forumService.getForumById(notNullId.toString())
-        assertEquals(expected, tmp)
+        assertEquals(expected, forumService.getForumById(notNullId.toString()))
     }
 
     @Test
@@ -71,10 +69,7 @@ internal class ForumServiceTest {
     }
 
     @Test
-    fun create() {
-    }
-
-    @Test
     fun getAllForums() {
+        assertEquals(listOf(forum, forum), forumService.getAllForums())
     }
 }
