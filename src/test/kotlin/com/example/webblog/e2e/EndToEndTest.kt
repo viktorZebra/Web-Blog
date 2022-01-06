@@ -97,6 +97,7 @@ internal class EndToEndTest {
         @JvmStatic
         fun `test`() = listOf(
             1
+
         )
     }
 }
