@@ -1,13 +1,16 @@
 package com.example.webblog.e2e
 
+import ResetDatabaseTestExecutionListener
 import com.example.webblog.model.dto.ForumsDto
 import com.example.webblog.model.dto.PostsDto
 import com.example.webblog.model.dto.ThreadsDto
 import com.example.webblog.model.dto.UserDto
 import org.junit.Test
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,10 +21,16 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
+import org.springframework.test.annotation.Repeat
+import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.jdbc.Sql
 
+@TestExecutionListeners(
+    listeners = [ResetDatabaseTestExecutionListener::class],
+    mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS
+)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql("/database/dropDB.sql", "/database/initDB.sql")
+//@Sql("/database/dropDB.sql", "/database/initDB.sql")
 internal class EndToEndTest {
 
     private val headers = HttpHeaders()
@@ -32,8 +41,8 @@ internal class EndToEndTest {
     @Autowired
     private lateinit var restTemplate: TestRestTemplate
 
-    @BeforeEach
-    fun setUp() {
+    @AfterEach
+    fun afterEach() {
     }
 
     private fun url(s: String): String {
@@ -42,6 +51,7 @@ internal class EndToEndTest {
 
     @ParameterizedTest
     @MethodSource("test")
+    @RepeatedTest(100)
     fun `should correct pass e2e post`() {
         val userDto = UserDto("Dmitry", "sh1228@mail.ru", "fury1228", "anon", 0, null)
         val forumDto = ForumsDto(1, "computers", "computers", null)
